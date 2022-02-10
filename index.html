@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Upload Image</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="jquery.storage.js"></script>
+</head>
+
+<body>
+    <script>
+        let counter = 0;
+        // This runs every x seconds and checks if a file have been uplaoded. 
+        myInt = setInterval(function() {
+            x = document.getElementById("file-input");
+            var files = x.files;
+
+            var preview = document.querySelector('img');
+            var file = document.querySelector('input[type=file]').files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function() {
+                preview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+
+            if (files.length != 0) {
+                if (counter == 0) {
+                    console.log("Do nothing");
+                    counter = counter + 1;
+                } else {
+                    $.sessionStorage('chosenImg', document.getElementById("photoImg").src);
+                    console.log("chosenImg have been send on to the next html page with source: " + document.getElementById("photoImg").src);
+                    clearInterval(myInt);
+                    window.location.href = "crop.html";
+                }
+            } else {
+                console.log("not lets go");
+            }
+        }, 200);
+    </script>
+
+    <h1 class="panel-header-title">Upload your image!<h1/>
+    <a href="#" class="btn" id="btn">
+    <input id="file-input" type="file"/>
+    </a>
+
+    <img src="" id="photoImg" height="200" alt="Image preview..." hidden>
+</body>
+
+</html>
